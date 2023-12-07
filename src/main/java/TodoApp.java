@@ -5,15 +5,13 @@ import java.util.Scanner;
 
 public class TodoApp {
     private static EntityManagerFactory entityManagerFactory;
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    // Existing constructor for regular use
     public TodoApp() {
         entityManagerFactory = Persistence.createEntityManagerFactory("TodoListPersistenceManager");
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    // New constructor for testing
     public TodoApp(EntityManager entityManager) {
         TodoApp.entityManagerFactory = Persistence.createEntityManagerFactory("TodoListPersistenceManager");
         this.entityManager = entityManager;
@@ -28,10 +26,8 @@ public class TodoApp {
     }
 
     public void deleteTodoItem(int number) {
-        int id = number;
-
         entityManager.getTransaction().begin();
-        TodoItemsEntity todoItem = entityManager.find(TodoItemsEntity.class, id);
+        TodoItemsEntity todoItem = entityManager.find(TodoItemsEntity.class, number);
         if (todoItem != null) {
             entityManager.remove(todoItem);
             entityManager.getTransaction().commit();
